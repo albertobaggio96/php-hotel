@@ -72,7 +72,7 @@
 
   <div class="row">
     <?php
-      foreach ($hotels[0] as $key => $hotelKey){
+      foreach ($hotels[0] as $key => $hotel){
         $key = str_replace('_', ' ', $key);
         echo "<div class='col border border-secondary'> {$key} </div>";
       }
@@ -86,25 +86,25 @@
       if(isset($_GET["parkingValue"]) && isset($_GET["voteFilter"])){
         if ($hotel["vote"] >= $_GET["voteFilter"]){
           if ($_GET["parkingValue"] === "optional"){
-            foreach ($hotel as $key => $element){
+            foreach ($hotel as $element){
               echo "<div class='col border border-secondary'>{$element}</div>";
             };
           } elseif ($_GET["parkingValue"] === "yes"){
             if($hotel["parking"] === "si"){
-              foreach ($hotel as $key => $element){
+              foreach ($hotel as $element){
                 echo "<div class='col border border-secondary'>{$element}</div>";
               };
             }
           } else{
             if($hotel["parking"] === "no"){
-              foreach ($hotel as $key => $element){
+              foreach ($hotel as $element){
                 echo "<div class='col border border-secondary'>{$element}</div>";
               };
             }
           }
         }
       } else{
-        foreach ($hotel as $key => $element){
+        foreach ($hotel as $element){
           $element = !$element ? "/" : $element;
           echo "<div class='col border border-secondary'>{$element}</div>";
         }
