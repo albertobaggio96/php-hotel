@@ -45,15 +45,31 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hotel</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <body>
-  <h1>Hotel list</h1>
+  <h1 class='fs-5'>Hotel list</h1>
+  <div class="row">
   <?php
-    foreach ($hotels as $hotel){
-      foreach ($hotel as $key => $element){
-        echo "<p> {$key} : {$element} </p>";
-      }
+    var_dump($hotels[0]);
+    foreach ($hotels[0] as $key => $hotelKey){
+      $key = str_replace('_', ' ', $key);
+      echo "<div class='col border border-secondary'> {$key} </div>";
     }
+    ?>
+  </div>
+  <?php
+  foreach ($hotels as $hotel){
+    echo "<div class='row'>";
+    foreach ($hotel as $key => $element){
+      $element = !$element ? "/" : $element;
+      echo "<div class='col border border-secondary'>{$element}</div>";
+    }
+    echo "</div>";
+  }
   ?>
+  
+
 </body>
 </html>
