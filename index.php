@@ -52,54 +52,65 @@
   <h1 class='fs-5'>Hotel list</h1>
 
   <form action="./index.php" method="GET">
-    <select name="parkingValue" id="parkingValue">
+    <label for="parking-value">Seleziona se desideri il parcheggio :</label>
+    <select name="parkingValue" id="parking-value">
       <option value="optional">opzionale</option>
       <option value="yes">si</option>
       <option value="no">no</option>
     </select>
+    <label for="vote-filter">Valutazione minima</label>
+    <select name="voteFilter" id="vote-filter">
+      <option value="0">Tutti</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
     <button type="submit">Cerca</button>
   </form>
+
   <div class="row">
-  <?php
-    foreach ($hotels[0] as $key => $hotelKey){
-      $key = str_replace('_', ' ', $key);
-      echo "<div class='col border border-secondary'> {$key} </div>";
-    }
+    <?php
+      foreach ($hotels[0] as $key => $hotelKey){
+        $key = str_replace('_', ' ', $key);
+        echo "<div class='col border border-secondary'> {$key} </div>";
+      }
     ?>
   </div>
+
   <?php
-  foreach ($hotels as $hotel){
-    echo "<div class='row'>";
-    $hotel["parking"] = $hotel["parking"] ? "si" : "no";
-    if(isset($_GET["parkingValue"])){
-      if ($_GET["parkingValue"] === "optional"){
+    foreach ($hotels as $hotel){
+      echo "<div class='row'>";
+      $hotel["parking"] = $hotel["parking"] ? "si" : "no";
+      if(isset($_GET["parkingValue"]) && isset($_GET["voteFilter"])){
+        if ($hotel["vote"] >= $_GET["voteFilter"]){
+          if ($_GET["parkingValue"] === "optional"){
+            foreach ($hotel as $key => $element){
+              echo "<div class='col border border-secondary'>{$element}</div>";
+            };
+          } elseif ($_GET["parkingValue"] === "yes"){
+            if($hotel["parking"] === "si"){
+              foreach ($hotel as $key => $element){
+                echo "<div class='col border border-secondary'>{$element}</div>";
+              };
+            }
+          } else{
+            if($hotel["parking"] === "no"){
+              foreach ($hotel as $key => $element){
+                echo "<div class='col border border-secondary'>{$element}</div>";
+              };
+            }
+          }
+        }
+      } else{
         foreach ($hotel as $key => $element){
           $element = !$element ? "/" : $element;
           echo "<div class='col border border-secondary'>{$element}</div>";
-        };
-      } elseif ($_GET["parkingValue"] === "yes"){
-        if($hotel["parking"] === "si"){
-          foreach ($hotel as $key => $element){
-            $element = !$element ? "/" : $element;
-            echo "<div class='col border border-secondary'>{$element}</div>";
-          };
-        }
-      } else{
-        if($hotel["parking"] === "no"){
-          foreach ($hotel as $key => $element){
-            $element = !$element ? "/" : $element;
-            echo "<div class='col border border-secondary'>{$element}</div>";
-          };
         }
       }
-    } else{
-      foreach ($hotel as $key => $element){
-        $element = !$element ? "/" : $element;
-        echo "<div class='col border border-secondary'>{$element}</div>";
-      }
+      echo "</div>";
     }
-    echo "</div>";
-  }
   ?>
   
 
