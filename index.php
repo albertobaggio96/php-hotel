@@ -50,9 +50,17 @@
 </head>
 <body>
   <h1 class='fs-5'>Hotel list</h1>
+
+  <form action="./index.php" method="GET">
+    <select name="parkingValue" id="parkingValue">
+      <option value="optional">opzionale</option>
+      <option value="yes">si</option>
+      <option value="no">no</option>
+    </select>
+    <button type="submit">Cerca</button>
+  </form>
   <div class="row">
   <?php
-    var_dump($hotels[0]);
     foreach ($hotels[0] as $key => $hotelKey){
       $key = str_replace('_', ' ', $key);
       echo "<div class='col border border-secondary'> {$key} </div>";
@@ -62,9 +70,33 @@
   <?php
   foreach ($hotels as $hotel){
     echo "<div class='row'>";
-    foreach ($hotel as $key => $element){
-      $element = !$element ? "/" : $element;
-      echo "<div class='col border border-secondary'>{$element}</div>";
+    $hotel["parking"] = $hotel["parking"] ? "si" : "no";
+    if(isset($_GET["parkingValue"])){
+      if ($_GET["parkingValue"] === "optional"){
+        foreach ($hotel as $key => $element){
+          $element = !$element ? "/" : $element;
+          echo "<div class='col border border-secondary'>{$element}</div>";
+        };
+      } elseif ($_GET["parkingValue"] === "yes"){
+        if($hotel["parking"] === "si"){
+          foreach ($hotel as $key => $element){
+            $element = !$element ? "/" : $element;
+            echo "<div class='col border border-secondary'>{$element}</div>";
+          };
+        }
+      } else{
+        if($hotel["parking"] === "no"){
+          foreach ($hotel as $key => $element){
+            $element = !$element ? "/" : $element;
+            echo "<div class='col border border-secondary'>{$element}</div>";
+          };
+        }
+      }
+    } else{
+      foreach ($hotel as $key => $element){
+        $element = !$element ? "/" : $element;
+        echo "<div class='col border border-secondary'>{$element}</div>";
+      }
     }
     echo "</div>";
   }
