@@ -1,41 +1,73 @@
 <?php 
-    $hotels = [
-        [
-            'name' => 'Hotel Belvedere',
-            'description' => 'Hotel Belvedere Descrizione',
-            'parking' => true,
-            'vote' => 4,
-            'distance_to_center' => 10.4
-        ],
-        [
-            'name' => 'Hotel Futuro',
-            'description' => 'Hotel Futuro Descrizione',
-            'parking' => true,
-            'vote' => 2,
-            'distance_to_center' => 2
-        ],
-        [
-            'name' => 'Hotel Rivamare',
-            'description' => 'Hotel Rivamare Descrizione',
-            'parking' => false,
-            'vote' => 1,
-            'distance_to_center' => 1
-        ],
-        [
-            'name' => 'Hotel Bellavista',
-            'description' => 'Hotel Bellavista Descrizione',
-            'parking' => false,
-            'vote' => 5,
-            'distance_to_center' => 5.5
-        ],
-        [
-            'name' => 'Hotel Milano',
-            'description' => 'Hotel Milano Descrizione',
-            'parking' => true,
-            'vote' => 2,
-            'distance_to_center' => 50
-        ],
-    ];
+  $hotels = [
+      [
+          'name' => 'Hotel Belvedere',
+          'description' => 'Hotel Belvedere Descrizione',
+          'parking' => true,
+          'vote' => 4,
+          'distance_to_center' => 10.4
+      ],
+      [
+          'name' => 'Hotel Futuro',
+          'description' => 'Hotel Futuro Descrizione',
+          'parking' => true,
+          'vote' => 2,
+          'distance_to_center' => 2
+      ],
+      [
+          'name' => 'Hotel Rivamare',
+          'description' => 'Hotel Rivamare Descrizione',
+          'parking' => false,
+          'vote' => 1,
+          'distance_to_center' => 1
+      ],
+      [
+          'name' => 'Hotel Bellavista',
+          'description' => 'Hotel Bellavista Descrizione',
+          'parking' => false,
+          'vote' => 5,
+          'distance_to_center' => 5.5
+      ],
+      [
+          'name' => 'Hotel Milano',
+          'description' => 'Hotel Milano Descrizione',
+          'parking' => true,
+          'vote' => 2,
+          'distance_to_center' => 50
+      ],
+  ];
+  $hotelsVoteFilter= [];
+  $filteredHotels = [];
+
+  if(isset($_GET["parkingValue"]) && isset($_GET["voteFilter"])){
+    foreach ($hotels as $hotel){
+      $hotel["parking"] = $hotel["parking"] ? "si" : "no";
+      if ($hotel["vote"] >= $_GET["voteFilter"]){
+        $hotelsVoteFilter[] = $hotel;
+      }
+    }
+    foreach ($hotelsVoteFilter as $element){
+      if ($_GET["parkingValue"] === "yes"){
+        if($element["parking"] === "si"){
+          $filteredHotels[] = $element;
+        }
+      } elseif($_GET["parkingValue"] === "no"){
+        if($element["parking"] === "no"){
+          $filteredHotels[] = $element;
+        }
+      } else{
+        $filteredHotels[] = $element;
+      }
+    }
+
+  } else{
+    foreach ($hotels as $hotel){
+      $hotel["parking"] = $hotel["parking"] ? "si" : "no";
+      $filteredHotels[] = $hotel;
+      }
+  }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -80,36 +112,12 @@
         }
       ?>
     </div>
-
+    
     <?php
-      foreach ($hotels as $hotel){
+      foreach ($filteredHotels as $hotel){
         echo "<div class='row'>";
-        $hotel["parking"] = $hotel["parking"] ? "si" : "no";
-        if(isset($_GET["parkingValue"]) && isset($_GET["voteFilter"])){
-          if ($hotel["vote"] >= $_GET["voteFilter"]){
-            if ($_GET["parkingValue"] === "optional"){
-              foreach ($hotel as $element){
-                echo "<div class='col border border-secondary'>{$element}</div>";
-              };
-            } elseif ($_GET["parkingValue"] === "yes"){
-              if($hotel["parking"] === "si"){
-                foreach ($hotel as $element){
-                  echo "<div class='col border border-secondary'>{$element}</div>";
-                };
-              }
-            } else{
-              if($hotel["parking"] === "no"){
-                foreach ($hotel as $element){
-                  echo "<div class='col border border-secondary'>{$element}</div>";
-                };
-              }
-            }
-          }
-        } else{
-          foreach ($hotel as $element){
-            $element = !$element ? "/" : $element;
-            echo "<div class='col border border-secondary'>{$element}</div>";
-          }
+        foreach($hotel as $element){
+          echo "<div class='col border border-secondary'>{$element}</div>";
         }
         echo "</div>";
       }
