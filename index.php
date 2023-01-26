@@ -36,27 +36,24 @@
           'distance_to_center' => 50
       ],
   ];
-  $hotelsVoteFilter= [];
+
   $filteredHotels = [];
 
   if(isset($_GET["parkingValue"]) && isset($_GET["voteFilter"])){
     foreach ($hotels as $hotel){
       $hotel["parking"] = $hotel["parking"] ? "si" : "no";
       if ($hotel["vote"] >= $_GET["voteFilter"]){
-        $hotelsVoteFilter[] = $hotel;
-      }
-    }
-    foreach ($hotelsVoteFilter as $element){
-      if ($_GET["parkingValue"] === "yes"){
-        if($element["parking"] === "si"){
-          $filteredHotels[] = $element;
+        if ($_GET["parkingValue"] === "yes"){
+          if(in_array("si", $hotel)){
+            $filteredHotels[] = $hotel;
+          }
+        } elseif($_GET["parkingValue"] === "no"){
+          if(in_array("no", $hotel)){
+            $filteredHotels[] = $hotel;
+          }
+        } else{
+          $filteredHotels[] = $hotel;
         }
-      } elseif($_GET["parkingValue"] === "no"){
-        if($element["parking"] === "no"){
-          $filteredHotels[] = $element;
-        }
-      } else{
-        $filteredHotels[] = $element;
       }
     }
 
